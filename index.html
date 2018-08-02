@@ -14,6 +14,9 @@
 	  </div>
 		<script>
 		  //使用js来计算会导致错误IEEE 754 Floating-point的浮点数编码方式来表示浮点数时，则会产生这类问题
+		  if (!Number.EPSILON) {
+        Number.EPSILON = Math.pow(2,-52);
+      }
 		  window.onload = function() {
 		    var btnArray = ['(',')','%','C','7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+']
 		    var btnContainer = document.getElementById('btnContainer')
@@ -28,7 +31,7 @@
 		      if(target.id.indexOf('btn') > -1) {
 		        if(target.dataset.btn === '='){
 		          try {
-		            show.innerText = expression ? eval(expression) : ''
+		            show.innerText = expression ? rightpad(eval(expression).toFixed(9)) : ''
 		          }catch(err){
 		            show.innerText = 'NaN'
 		            throw new Error('the expression error')
@@ -44,6 +47,23 @@
 		        }
 		      }
 		    },false)
+		  }
+		  
+		  function rightpad(str) {
+		    var copy = str
+		    var intStr = ''
+		    var newStr = ''
+		    if(str.indexOf('.') === -1) {
+		      return str
+		    }else {
+		      intStr = str.slice(0,str.indexOf('.'))
+		      newStr = str.slice(str.indexOf('.')).replace(/0*$/,'')
+		      if(newStr.length === 1) {
+		        return intStr
+		      }else {
+		        return intStr + newStr
+		      }
+		    }
 		  }
 		</script>
 	</body>
