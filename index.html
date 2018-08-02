@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="css/common.css" />
+		<title></title>
+	</head>
+	<body>
+	  <div class="container">
+	    <div class="screen clearfix">
+	      <span class="show" id="show"></span>
+	    </div>
+	    <div class="clearfix" id="btnContainer"></div>
+	  </div>
+		<script>
+		  //使用js来计算会导致错误IEEE 754 Floating-point的浮点数编码方式来表示浮点数时，则会产生这类问题
+		  window.onload = function() {
+		    var btnArray = ['(',')','%','C','7','8','9','/','4','5','6','*','1','2','3','-','0','.','=','+']
+		    var btnContainer = document.getElementById('btnContainer')
+		    var show = document.getElementById('show')
+		    var expression = ''
+		    for(var i=0; i<20; i++) {
+		      btnContainer.innerHTML += '<div class="btn" id="btn'+ i +'" data-btn="' + btnArray[i] + '">' + btnArray[i] + '<div>'
+		    }
+		    btnContainer.addEventListener('click',function(e){
+		      var e = e || window.event
+		      var target = e.target || e.srcElement
+		      if(target.id.indexOf('btn') > -1) {
+		        if(target.dataset.btn === '='){
+		          try {
+		            show.innerText = expression ? eval(expression) : ''
+		          }catch(err){
+		            show.innerText = 'NaN'
+		            throw new Error('the expression error')
+		          }
+		        }
+		        else if(target.dataset.btn === 'C') {
+		          expression = ''
+		          show.innerText = expression
+		        }
+		        else {
+		          expression += target.dataset.btn
+		          show.innerText = expression
+		        }
+		      }
+		    },false)
+		  }
+		</script>
+	</body>
+</html>
